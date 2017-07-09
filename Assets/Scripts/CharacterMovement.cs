@@ -22,6 +22,10 @@ public class CharacterMovement : MonoBehaviour {
 
     private Vector3 moveDirection = Vector3.zero;
 
+
+    
+
+
     // Use this for initialization
     void Start () {
 
@@ -65,6 +69,33 @@ public class CharacterMovement : MonoBehaviour {
 
 
         // Camera Movement
+
+        bool firstPersonView = false;
+
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            GameObject mainCamera = GameObject.FindWithTag("MainCamera");
+
+            Vector3 poz = new Vector3(0f, 1f, 0f);
+
+            mainCamera.transform.position = poz;
+
+            firstPersonView = true;
+        }
+        
+        
+        if(Input.GetKeyDown(KeyCode.V) && firstPersonView == true)
+        {
+            GameObject mainCamera = GameObject.FindWithTag("MainCamera");
+
+            Vector3 poz = new Vector3(0f, 1f, -10.8f);
+
+            mainCamera.transform.position = poz;
+
+            firstPersonView = true;
+
+        }
+        
 
         float rotLeftRight = Input.GetAxis("Mouse X") * mouseSensivity;
 

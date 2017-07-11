@@ -82,8 +82,6 @@ public class CameraControl : MonoBehaviour {
 
         else if (isLocked)
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, lockedPosition.y, 0);
-
-        Debug.Log(zoom);
     }
 
     void ResolveCollision()

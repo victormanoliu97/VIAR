@@ -8,6 +8,8 @@ public class MoveInput : MonoBehaviour {
     CameraControl myCamControl;
 
     float sensitivity_x = 3f;
+    Vector2 desiredDirection;
+    float desiredRotation;
 
     private void Start()
     {
@@ -31,28 +33,42 @@ public class MoveInput : MonoBehaviour {
         }
         else
         {
-            //Place Holder
-            if (Input.GetKeyDown(KeyCode.A))
-                TurnTo(-90);
-            if (Input.GetKeyDown(KeyCode.D))
-                TurnTo(90);
-            if (Input.GetKeyDown(KeyCode.W))
-                TurnTo(0);
-            if (Input.GetKeyDown(KeyCode.S))
-                TurnTo(180);
-
-            if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+            Vector2 newDesiredDirection = new Vector2(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
+            if(newDesiredDirection != desiredDirection)
+            {
+                desiredDirection = newDesiredDirection;
+                desiredRotation = Angle.Add(Vector2toAngles(desiredDirection), myCamPivot.eulerAngles.y);
+                if (desiredDirection != Vector2.zero)
+                    TurnTo(desiredRotation);
+            }
+            
+            //if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
+                
+            if (desiredDirection == Vector2.zero)
+                myMotor.Move(0);
+            else if (RotatedAt(desiredRotation))
                 myMotor.Move(1);
             else
                 myMotor.Move(0);
         }
-	}
+    }
 
     void TurnTo(float _direction)
     {
         myCamControl.Lock();
-        myMotor.TurnTo(myCamPivot.eulerAngles.y + _direction);
+        myMotor.TurnTo(_direction);
         myCamControl.ReturnToLock();
         myCamControl.UnLock();
+    }
+    bool RotatedAt(float _rotation,float _sensibility = 1f)
+    {
+        //PlaceHolder
+        //_rotation = -_rotation;
+        float camRotation = myCamPivot.localEulerAngles.y;
+        return Angle.Equals(transform.eulerAngles.y, _rotation, _sensibility);  
+    }
+    float Vector2toAngles(Vector2 _direction)
+    {
+        return Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
     }
 }

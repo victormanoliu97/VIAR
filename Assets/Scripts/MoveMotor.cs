@@ -5,13 +5,14 @@ using UnityEngine;
 public class MoveMotor : MonoBehaviour {
     CharacterController myChar;
     bool inControl = true;
+    [SerializeField]
+    float forwardSpeed = 3.5f, backwardSpeed = 2f, turnSpeed = 2f, lateralSpeed = 2f;
 
-    float forwardSpeed = 7f, backwardSpeed = 4f, turnSpeed = 2f, lateralSpeed = 2f;
     public float runSpeedForwardOffset = 1.6f, runSpeedTurnOffset = 0.5f, runSpeedLateralOffset = 0.4f;
 
     //paramaters for animations
     public bool isIdle = true, isWalkingForward, isWalkingBackward, isTurning, isRunning, isStrafing;
-    int turningDirection, strafingDirection;
+    public int turningDirection, strafingDirection;
     
 
     private void Start()

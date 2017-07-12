@@ -13,10 +13,22 @@ public class CharacterAnimation : MonoBehaviour {
     }
     private void Update()
     {
-        myAnim.SetBool("isWalking", myMotor.isWalkingForward);
-        if(myMotor.isRunning)
-            myAnim.SetFloat("forwardSpeed", myMotor.runSpeedForwardOffset);
+        if (!myMotor.isWalkingForward && !myMotor.isWalkingBackward)
+            myAnim.SetInteger("Vertical", 0);
         else
-            myAnim.SetFloat("forwardSpeed", 1);
+            if (myMotor.isWalkingForward)
+                myAnim.SetInteger("Vertical", 1);
+            else
+                if (myMotor.isWalkingBackward)
+                    myAnim.SetInteger("Vertical", -1);
+
+        if (myMotor.strafingDirection == 0)
+            myAnim.SetInteger("Horizontal", 0);
+        else
+            if (myMotor.strafingDirection > 0)
+            myAnim.SetInteger("Horizontal", 1);
+            else
+                if (myMotor.strafingDirection < 0)
+                myAnim.SetInteger("Horizontal", -1);
     }
 }

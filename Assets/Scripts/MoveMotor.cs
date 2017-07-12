@@ -6,12 +6,13 @@ public class MoveMotor : MonoBehaviour {
     CharacterController myChar;
     bool inControl = true;
     [SerializeField]
-    float forwardSpeed = 3.5f, backwardSpeed = 2f, turnSpeed = 2f, lateralSpeed = 2f;
+    float forwardSpeed = 3.5f, backwardSpeed = 1.5f, turnSpeed = 2f, lateralSpeed = 2f, rotateSpeed = 100f;
 
     public float runSpeedForwardOffset = 1.6f, runSpeedTurnOffset = 0.5f, runSpeedLateralOffset = 0.4f;
 
     //paramaters for animations
     public bool isIdle = true, isWalkingForward, isWalkingBackward, isTurning, isRunning, isStrafing;
+    public int isRotating;
     public int turningDirection, strafingDirection;
     
 
@@ -99,5 +100,16 @@ public class MoveMotor : MonoBehaviour {
         lateralSpeed /= runSpeedLateralOffset;
         turnSpeed /= runSpeedTurnOffset;
         isRunning = false;
+    }
+
+    public void RotateLeft()
+    {
+        transform.Rotate(0, -rotateSpeed*Time.deltaTime, 0);
+        isRotating = -1;
+    }
+    public void RotateRight()
+    {
+        transform.Rotate(0, rotateSpeed* Time.deltaTime, 0);
+        isRotating = 1;
     }
 }

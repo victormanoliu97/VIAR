@@ -33,6 +33,14 @@ public class MoveInput : MonoBehaviour {
         }
         else
         {
+            // Rotate in 3rd person
+            if (Input.GetKey(KeyCode.Q))
+                myMotor.RotateLeft();
+            else
+            if (Input.GetKey(KeyCode.E))
+                myMotor.RotateRight();
+            else
+                myMotor.isRotating = 0;
             Vector2 newDesiredDirection = new Vector2(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
             if(newDesiredDirection != desiredDirection)
             {

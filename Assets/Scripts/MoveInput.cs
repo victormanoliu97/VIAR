@@ -26,7 +26,8 @@ public class MoveInput : MonoBehaviour {
 
         if(myCamControl.FirstPerson)
         {
-            transform.eulerAngles += Vector3.up * Input.GetAxis("Mouse X") * sensitivity_x;
+            //transform.eulerAngles += Vector3.up * Input.GetAxis("Mouse X") * sensitivity_x;
+            myMotor.Turn(Input.GetAxis("Mouse X"));
 
             myMotor.Move((int)Input.GetAxisRaw("Vertical"));
             myMotor.Strafe((int)Input.GetAxisRaw("Horizontal"));
@@ -34,6 +35,7 @@ public class MoveInput : MonoBehaviour {
         else
         {
             // Rotate in 3rd person
+            /*
             if (Input.GetKey(KeyCode.Q))
                 myMotor.RotateLeft();
             else
@@ -41,6 +43,9 @@ public class MoveInput : MonoBehaviour {
                 myMotor.RotateRight();
             else
                 myMotor.isRotating = 0;
+                */
+            myMotor.Turn(Input.GetAxisRaw("Rotation"));
+
             Vector2 newDesiredDirection = new Vector2(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
             if(newDesiredDirection != desiredDirection)
             {
@@ -49,8 +54,6 @@ public class MoveInput : MonoBehaviour {
                 if (desiredDirection != Vector2.zero)
                     TurnTo(desiredRotation);
             }
-            
-            //if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
                 
             if (desiredDirection == Vector2.zero)
                 myMotor.Move(0);

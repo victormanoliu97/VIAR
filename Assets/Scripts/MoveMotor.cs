@@ -6,7 +6,7 @@ public class MoveMotor : MonoBehaviour {
     CharacterController myChar;
     bool inControl = true;
     [SerializeField]
-    float forwardSpeed = 3.5f, backwardSpeed = 1.5f, turnSpeed = 2f, lateralSpeed = 2f, rotateSpeed = 100f;
+    float forwardSpeed = 3.5f, backwardSpeed = 1.5f, turnSpeed = 50f, lateralSpeed = 2f;
 
     public float runSpeedForwardOffset = 1.6f, runSpeedTurnOffset = 0.5f, runSpeedLateralOffset = 0.4f;
 
@@ -26,13 +26,19 @@ public class MoveMotor : MonoBehaviour {
         myChar.Move(Vector3.down * 0.98f); 
     }
 
-    void Turn(int _direction)
+
+    public void Turn(float _direction)
     {
         if(myChar.isGrounded)
         {
-            transform.eulerAngles += Vector3.up * _direction * turnSpeed * Time.deltaTime;
+            float _speedOffset = Mathf.Abs(_direction); 
+            if (_direction > 0)
+                _direction = 1;
+            else if (_direction < 0)
+                _direction = -1;
+            transform.eulerAngles += Vector3.up * _direction * turnSpeed * _speedOffset * Time.deltaTime;
 
-            turningDirection = _direction;
+            turningDirection = (int)_direction;
             if (turningDirection != 0)
                 isTurning = true;
             else
@@ -100,16 +106,5 @@ public class MoveMotor : MonoBehaviour {
         lateralSpeed /= runSpeedLateralOffset;
         turnSpeed /= runSpeedTurnOffset;
         isRunning = false;
-    }
-
-    public void RotateLeft()
-    {
-        transform.Rotate(0, -rotateSpeed*Time.deltaTime, 0);
-        isRotating = -1;
-    }
-    public void RotateRight()
-    {
-        transform.Rotate(0, rotateSpeed* Time.deltaTime, 0);
-        isRotating = 1;
     }
 }

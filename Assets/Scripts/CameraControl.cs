@@ -11,7 +11,7 @@ public class CameraControl : MonoBehaviour {
     const int MIN_ANGLE_1 = 40, MAX_ANGLE_1 = 360 - 68;
     const int MIN_ZOOM = -2, MAX_ZOOM = -9;
     public bool isReversed = false, FirstPerson = false, isCameraConstrained = false;
-    float Offset_Collision = 0.2f, Offset_1st_z = 0.3f, Offset_1st_y = 0.9f;
+    float Offset_Collision = 0.2f, Offset_1st_z = 0.2f, Offset_1st_y = 0.9f;
     float zoom;
 
     bool isLocked = false;
@@ -117,6 +117,7 @@ public class CameraControl : MonoBehaviour {
         else
         {
             myCam.transform.localPosition += Vector3.forward * zoom - Vector3.up * Offset_1st_y;
+            myCam.transform.localEulerAngles = Vector3.zero;
             transform.localEulerAngles = thirdPersionDefault;
         }
     }

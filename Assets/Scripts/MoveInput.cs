@@ -7,7 +7,7 @@ public class MoveInput : MonoBehaviour {
     Transform myCamPivot;
     CameraControl myCamControl;
 
-    float sensitivity_x = 3f;
+    float turnSpeed = 200f;
     Vector2 desiredDirection;
     float desiredRotation;
 
@@ -26,48 +26,40 @@ public class MoveInput : MonoBehaviour {
 
         if(myCamControl.FirstPerson)
         {
-            //transform.eulerAngles += Vector3.up * Input.GetAxis("Mouse X") * sensitivity_x;
             myMotor.Turn(Input.GetAxis("Mouse X"));
-
             myMotor.Move((int)Input.GetAxisRaw("Vertical"));
             myMotor.Strafe((int)Input.GetAxisRaw("Horizontal"));
         }
         else
         {
-            // Rotate in 3rd person
-            /*
-            if (Input.GetKey(KeyCode.Q))
-                myMotor.RotateLeft();
-            else
-            if (Input.GetKey(KeyCode.E))
-                myMotor.RotateRight();
-            else
-                myMotor.isRotating = 0;
-                */
-            myMotor.Turn(Input.GetAxisRaw("Rotation"));
-
+            //myMotor.Turn(Input.GetAxisRaw("Rotation"));
             Vector2 newDesiredDirection = new Vector2(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
             if(newDesiredDirection != desiredDirection)
             {
                 desiredDirection = newDesiredDirection;
                 desiredRotation = Angle.Add(Vector2toAngles(desiredDirection), myCamPivot.eulerAngles.y);
-                if (desiredDirection != Vector2.zero)
-                    TurnTo(desiredRotation);
             }
-                
+            
             if (desiredDirection == Vector2.zero)
                 myMotor.Move(0);
             else if (RotatedAt(desiredRotation))
+            {
+                TurnTo(transform.eulerAngles.y); // to reset the animation
                 myMotor.Move(1);
+            }               
             else
-                myMotor.Move(0);
+            {
+                TurnTo(Angle.RotationTo(transform.eulerAngles.y, desiredRotation, turnSpeed * Time.deltaTime));
+                myMotor.Move(1);
+            }
+
         }
     }
 
     void TurnTo(float _direction)
     {
         myCamControl.Lock();
-        myMotor.TurnTo(_direction);
+        myMotor.Turn(Angle.toSigned(_direction - transform.eulerAngles.y));
         myCamControl.ReturnToLock();
         myCamControl.UnLock();
     }

@@ -10,6 +10,9 @@ public class MoveMotor : MonoBehaviour {
 
     public float runSpeedForwardOffset = 1.6f, runSpeedTurnOffset = 0.5f, runSpeedLateralOffset = 0.4f;
 
+    bool RotationRequest = false;
+    float DesiredRotation;
+
     //paramaters for animations
     public bool isIdle = true, isWalkingForward, isWalkingBackward, isTurning, isRunning, isStrafing;
     public int isRotating;
@@ -25,7 +28,18 @@ public class MoveMotor : MonoBehaviour {
         //gravity
         myChar.Move(Vector3.down * 0.98f); 
     }
-
+    private void Update()
+    {
+        if(RotationRequest)
+        {
+            if(!Angle.Equals(DesiredRotation, transform.eulerAngles.y))
+            {
+                transform.eulerAngles += Vector3.up * (Angle.RotationTo(transform.eulerAngles.y, DesiredRotation, turnSpeed * Time.deltaTime) - transform.eulerAngles.y);
+            }
+            if (Angle.Equals(DesiredRotation, transform.eulerAngles.y))
+                RotationRequest = false;
+        }
+    }
 
     public void Turn(float _direction)
     {
@@ -48,7 +62,10 @@ public class MoveMotor : MonoBehaviour {
     public void TurnTo(float _newRotation)
     {
         //Place Holder
-        transform.eulerAngles += Vector3.up * (_newRotation - transform.eulerAngles.y);
+        //transform.eulerAngles += Vector3.up * (_newRotation - transform.eulerAngles.y);
+
+        RotationRequest = true;
+        DesiredRotation = _newRotation;
     }
     public void Move(int _direction)
     {
